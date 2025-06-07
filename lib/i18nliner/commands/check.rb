@@ -20,6 +20,7 @@ module I18nliner
         @processors ||= I18nliner::Processors.all.map do |klass|
           klass.new @translations,
                     :only => @options[:only],
+                    :format => @options[:format],
                     :translations => @translations,
                     :checker => method(:check_file)
         end

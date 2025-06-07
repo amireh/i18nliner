@@ -8,7 +8,7 @@ describe I18nliner::Extractors::RubyExtractor do
     sexps = RubyParser.new.parse(source)
     extractor = I18nliner::Extractors::RubyExtractor.new(sexps, scope)
     translations = []
-    extractor.each_translation { |translation| translations << translation }
+    extractor.each_translation { |key, value| translations << [key, value] }
     Hash[translations]
   end
 

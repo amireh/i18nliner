@@ -37,10 +37,11 @@ module I18nliner
         return [] unless default
         keys = Array(key)
         keys.inject([]) do |result, key|
+          meta = {context: @options[:context], line: @line}
           if default.is_a?(String)
-            result << [key, default]
+            result << [key, default, meta]
           else
-            result.concat default.map { |dk, dv| ["#{key}.#{dk}", dv] }
+            result.concat default.map { |dk, dv| ["#{key}.#{dk}", dv, meta] }
           end
         end
       end

@@ -1,17 +1,17 @@
 # -*- encoding: utf-8 -*-
- 
+
 Gem::Specification.new do |s|
   s.name = 'i18nliner'
-  s.version = '0.2.4'
+  s.version = '0.3.0'
   s.summary = 'I18n made simple'
   s.description = 'No .yml files. Inline defaults. Optional keys. Inferred interpolation values. Wrappers and blocks, so your templates look template-y and your translations stay HTML-free.'
 
-  s.required_ruby_version     = '>= 2.7'
+  s.required_ruby_version     = '>= 3.0'
   s.required_rubygems_version = '>= 1.3.5'
 
   s.author            = 'Jon Jensen'
   s.email             = 'jenseng@gmail.com'
-  s.homepage          = 'http://github.com/jenseng/i18nliner'
+  s.homepage          = 'http://github.com/amireh/i18nliner'
 
   s.files = %w(LICENSE.txt Rakefile README.md) + Dir['{lib,spec}/**/*.{rb,rake}']
   s.add_dependency('activesupport', '>= 6.0')

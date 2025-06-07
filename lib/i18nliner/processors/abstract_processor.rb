@@ -14,6 +14,7 @@ module I18nliner
         @only = options[:only]
         @checker = options[:checker] || method(:noop_checker)
         @pattern = options[:pattern] || self.class.default_pattern
+        @format = options[:format] || nil
       end
 
       def noop_checker(file)
@@ -38,7 +39,7 @@ module I18nliner
 
       def check_file(file)
         @file_count += 1
-        check_contents(source_for(file), scope_for(file))
+        check_contents(file, source_for(file), scope_for(file))
       end
 
       def self.inherited(klass)

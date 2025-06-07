@@ -71,14 +71,14 @@ describe I18nliner::Extractors::TranslateCall do
   describe "key inference" do
     it "should generate literal keys" do
       I18nliner.inferred_key_format :literal do
-        expect(call(no_scope, "zomg key").translations).to eq(
+        expect(call(no_scope, "zomg key").translations.map { |x| x[0..1] }).to eq(
           [["zomg key", "zomg key"]])
       end
     end
 
     it "should generate underscored keys" do
       I18nliner.inferred_key_format :underscored do
-        expect(call(no_scope, "zOmg key!!").translations).to eq(
+        expect(call(no_scope, "zOmg key!!").translations.map { |x| x[0..1] }).to eq(
           [["zomg_key", "zOmg key!!"]])
       end
     end
@@ -106,7 +106,7 @@ describe I18nliner::Extractors::TranslateCall do
 
     it "should generate underscored + crc32 keys" do
       I18nliner.inferred_key_format :underscored_crc32 do
-        expect(call(no_scope, "zOmg key!!").translations).to eq(
+        expect(call(no_scope, "zOmg key!!").translations.map { |x| x[0..1] }).to eq(
           [["zomg_key_90a85b0b", "zOmg key!!"]])
       end
     end
@@ -143,19 +143,19 @@ describe I18nliner::Extractors::TranslateCall do
     describe "defaults" do
       it "should be inferred" do
         translations = call(no_scope, "person", {:count => Object.new}).translations
-        expect(translations.map(&:last).sort).to eq ["%{count} people", "1 person"]
+        expect(translations.map { |x| x[1] }.sort).to eq ["%{count} people", "1 person"]
       end
 
       it "should not be inferred if given multiple words" do
         translations = call(no_scope, "happy person", {:count => Object.new}).translations
-        expect(translations.map(&:last)).to eq ["happy person"]
+        expect(translations.map { |x| x[1] }).to eq ["happy person"]
       end
     end
 
     it "should accept valid hashes" do
-      expect(call(no_scope, {:one => "asdf", :other => "qwerty"}, :count => 1).translations.sort).to eq(
+      expect(call(no_scope, {:one => "asdf", :other => "qwerty"}, :count => 1).translations.map { |x| x[0..1] }.sort).to eq(
         [["qwerty_98185351.one", "asdf"], ["qwerty_98185351.other", "qwerty"]])
-      expect(call(no_scope, :some_stuff, {:one => "asdf", :other => "qwerty"}, :count => 1).translations.sort).to eq(
+      expect(call(no_scope, :some_stuff, {:one => "asdf", :other => "qwerty"}, :count => 1).translations.map { |x| x[0..1] }.sort).to eq(
         [["some_stuff.one", "asdf"], ["some_stuff.other", "qwerty"]])
     end
 

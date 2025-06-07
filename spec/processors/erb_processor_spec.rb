@@ -7,7 +7,7 @@ describe I18nliner::Processors::ErbProcessor do
     @translations = I18nliner::Extractors::TranslationHash.new
     @processor = I18nliner::Processors::ErbProcessor.new(@translations)
   end
-  
+
   describe "#scope_for" do
     context "with an erb template" do
       subject { @processor.scope_for("app/views/foos/show.html.erb") }
@@ -26,7 +26,7 @@ describe I18nliner::Processors::ErbProcessor do
 
   describe "#check_contents" do
     it "should extract valid translation calls" do
-      @processor.check_contents(<<-SOURCE)
+      @processor.check_contents '-', <<-SOURCE
         <%= t "Inline!" %>
         <%= t do %>
           Zomg a block
@@ -34,7 +34,8 @@ describe I18nliner::Processors::ErbProcessor do
              title="<%= t do %>what is this?<% end %>"
              >with nesting</a>!!!
         <% end %>
-        SOURCE
+      SOURCE
+
       expect(@translations.values.sort).to eq [
         "Inline!",
         "Zomg a block *with nesting*!!!",

@@ -8,14 +8,37 @@ module I18nliner
     class RubyProcessor < AbstractProcessor
       default_pattern '*.rb'
 
-      def check_contents(source, scope = Scope.new)
+      def check_contents(file, source, scope = Scope.new)
         return if source !~ Extractors::RubyExtractor.pattern
         sexps = RubyParser.new.parse(pre_process(source))
         extractor = Extractors::RubyExtractor.new(sexps, scope)
-        extractor.each_translation do |key, value|
+        extractor.each_translation do |key, value, context:, line:|
           @translation_count += 1
           @translations.line = extractor.current_line
-          @translations[key] = value
+
+          case @format
+          when "compact"
+            @translations[key] ||= { phrase: value, sources: [] }
+            @translations[key][:sources].push({
+              file: "#{file}:#{line}",
+              context:
+            }.compact)
+          when "uniq"
+            @translations[key] ||= { phrase: value, sources: [] }
+            @translations[key][:sources].push({
+              file:,
+              context:
+            }.compact) unless @translations[key][:sources].any? { |x| x[:file] == file && x[:context] == context }
+          when "full"
+            @translations[key] ||= { phrase: value, sources: [] }
+            @translations[key][:sources].push({
+              file:,
+              line:,
+              context:
+            }.compact)
+          else
+            @translations[key] = value
+          end
         end
       end
 
